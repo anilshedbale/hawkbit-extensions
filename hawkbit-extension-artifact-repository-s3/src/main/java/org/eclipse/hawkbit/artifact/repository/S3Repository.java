@@ -47,7 +47,6 @@ import com.google.common.io.BaseEncoding;
  */
 @Validated
 public class S3Repository extends AbstractArtifactRepository {
-
     private static final Logger LOG = LoggerFactory.getLogger(S3Repository.class);
 
     private final AmazonS3 amazonS3;
@@ -69,7 +68,9 @@ public class S3Repository extends AbstractArtifactRepository {
 
     @Override
     protected AbstractDbArtifact store(final String tenant, final String sha1Hash16, final String mdMD5Hash16,
-            final String contentType, final File file) throws IOException {
+            final String contentType, final String tempFile) throws IOException {
+        final File file = new File(tempFile);
+
         final S3Artifact s3Artifact = createS3Artifact(tenant, sha1Hash16, mdMD5Hash16, contentType, file);
         final String key = objectKey(tenant, sha1Hash16);
 
